@@ -1,16 +1,62 @@
-# React + Vite
+# e-Consultation Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A digital platform for public participation in government policy consultations.
 
-Currently, two official plugins are available:
+The portal allows citizens to view proposed policies, understand consultation details, submit structured feedback, and enables government authorities to review and analyse public responses in an organized manner.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Overview
 
-## React Compiler
+Government consultations can receive a large number of responses from citizens. When feedback is collected only as unstructured comments, it can be difficult for authorities to identify common concerns and understand which parts of a proposal are receiving support or opposition.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The e-Consultation Portal provides a structured workflow connecting citizens and government authorities through a single platform.
 
-## Expanding the ESLint configuration
+## Key Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Citizen Portal
+
+- Browse active government consultations
+- Search consultations by title or department
+- View consultation details and policy information
+- View specific rules or sections of a proposal
+- Submit feedback for a particular policy section
+- Select feedback sentiment such as:
+  - Supportive
+  - Neutral
+  - Concerned
+- Submit written comments and suggestions
+- View the status and details of consultations
+
+### Authority Dashboard
+
+- View active consultations
+- Review submitted public feedback
+- Organize responses according to the relevant consultation and policy section
+- Review sentiment distribution
+- Identify recurring concerns and topics
+- Analyse feedback to support policy decisions
+
+## Feedback Workflow
+
+```text
+Citizen
+   │
+   ▼
+Select Consultation
+   │
+   ▼
+Read Policy / Proposal
+   │
+   ▼
+Select Relevant Rule or Section
+   │
+   ▼
+Submit Sentiment + Written Feedback
+   │
+   ▼
+Feedback Analysis
+   │
+   ▼
+Authority Dashboard
+   │
+   ▼
+Review Public Opinion
