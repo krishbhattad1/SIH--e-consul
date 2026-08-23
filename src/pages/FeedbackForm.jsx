@@ -82,11 +82,28 @@ function FeedbackForm() {
       }),
     };
 
-    const existingFeedback =
-      JSON.parse(
-        localStorage.getItem("consultationFeedback")
-      ) || [];
+    let existingFeedback = [];
 
+try {
+  const storedFeedback = localStorage.getItem(
+    "consultationFeedback"
+  );
+
+  existingFeedback = storedFeedback
+    ? JSON.parse(storedFeedback)
+    : [];
+
+  if (!Array.isArray(existingFeedback)) {
+    existingFeedback = [];
+  }
+} catch (error) {
+  console.error(
+    "Unable to read stored feedback:",
+    error
+  );
+
+  existingFeedback = [];
+}
     localStorage.setItem(
       "consultationFeedback",
       JSON.stringify([

@@ -340,33 +340,42 @@ function PublicHome() {
             </p>
           </div>
 
-          <div className="footer-navigation">
+        <div className="footer-navigation">
 
-            <a href="#home">
-              Home
-            </a>
+  <a href="#home">
+    Home
+  </a>
 
-            <a href="#consultations">
-              Consultations
-            </a>
+  <a href="#consultations">
+    Consultations
+  </a>
 
-            <a href="#help">
-              Help
-            </a>
+  <a href="#help">
+    Help
+  </a>
 
-          </div>
+</div>
 
-        </div>
+           </div>
 
         <div className="footer-legal">
 
           <span>
             Prototype interface — SIH 2026 Internal Hackathon
           </span>
+<div className="footer-legal-links">
 
-          <span>
-            Accessibility &nbsp; | &nbsp; Privacy
-          </span>
+  <a href="/terms">
+    Terms & Conditions
+  </a>
+
+  <span>|</span>
+
+  <a href="/privacy">
+    Privacy Policy
+  </a>
+
+</div>
 
         </div>
 
