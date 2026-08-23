@@ -1,21 +1,31 @@
-import re
+import os
+from google import genai
 
-POS_WORDS = {"good","great","support","supportive","welcome","appreciate","helpful",
-             "positive","beneficial","excellent","fair","clear","transparent",
-             "progressive","needed","glad","happy","effective","strong","commendable",
-             "useful","balanced","trust","nice"}
-NEG_WORDS = {"bad","against","oppose","unfair","burden","confusing","harmful",
-             "concerned","worried","poor","weak","unclear","excessive","costly",
-             "complicated","disappointed","fails","fail","problematic","vague",
-             "delay","delayed","unnecessary","hurt","struggle","tight","bankrupt"}
-
-def tokenize(text: str) -> list[str]:
-    return re.findall(r"[a-z']+", text.lower())
+gemini_client = genai.Client()
 
 def classify(text: str) -> str:
-    words = tokenize(text )
-    pos = sum(1 for w in words if w in POS_WORDS)
-    neg = sum(1 for w in words if w in NEG_WORDS)
-    if pos == neg:
+    """
+    Classifies sentiment into 'support', 'concern', or 'neutral' using Gemini, 
+    handling translation and sentiment context natively.
+    """
+    prompt = (
+        "Analyze the sentiment of the following citizen feedback (which may be in English, Hindi, or Marathi). "
+        "Classify it into exactly one of these three words: 'support', 'concern', or 'neutral'. "
+        "Output only the single word.\n\n"
+        f"Feedback: {text}"
+    )
+    try:
+        response = gemini_client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+        result = response.text.strip().lower()
+        if "support" in result:
+            return "support"
+        elif "concern" in result or "negative" in result:
+            return "concern"
+        else:
+            return "neutral"
+    except Exception as e:
+        print(f"Gemini sentiment classification failed: {e}")
         return "neutral"
-    return "positive" if pos > neg else "negative"

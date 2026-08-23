@@ -1,37 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import GovernmentHeader from "../components/GovernmentHeader";
 import "./FeedbackForm.css";
 
-const consultationRules = [
-  {
-    id: "ev-adoption",
-    title: "Rule 1 — Electric Vehicle Adoption",
-  },
-  {
-    id: "charging",
-    title: "Rule 2 — Charging Infrastructure",
-  },
-  {
-    id: "incentives",
-    title: "Rule 3 — Purchase Incentives",
-  },
-  {
-    id: "battery",
-    title: "Rule 4 — Battery Manufacturing",
-  },
-  {
-    id: "public-transport",
-    title: "Rule 5 — Public Transport Electrification",
-  },
-  {
-    id: "general",
-    title: "General / Other",
-  },
-];
-
 function FeedbackForm() {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  
+  const [consultationRules, setConsultationRules] = useState([]);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -46,568 +23,181 @@ function FeedbackForm() {
   const [submitted, setSubmitted] = useState(false);
   const [feedbackId, setFeedbackId] = useState("");
 
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/modules")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modules) setConsultationRules(data.modules);
+      })
+      .catch((err) => console.error("Failed to load modules", err));
+  }, []);
+
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
-
     setFormData((previous) => ({
       ...previous,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const id = `EC-${Date.now().toString().slice(-8)}`;
-
-    const selectedRule = consultationRules.find(
-      (rule) => rule.id === formData.rule
-    );
-
-    const newFeedback = {
-      id,
-      consultationId: "ev-policy-2027",
-      consultationTitle: "Draft Electric Vehicle Policy 2027",
+    const payload = {
       name: formData.name,
       email: formData.email,
       ruleId: formData.rule,
-      ruleTitle: selectedRule?.title || "General / Other",
       language: formData.language,
-      opinion: formData.opinion,
+      opinion: "AI_computed",
       feedback: formData.feedback,
-      date: new Date().toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
     };
 
-    let existingFeedback = [];
+    try {
+      const response = await fetch("http://127.0.0.1:8000/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-try {
-  const storedFeedback = localStorage.getItem(
-    "consultationFeedback"
-  );
+      if (response.ok) {
+        const id = `EC-${Date.now().toString().slice(-8)}`;
+        setFeedbackId(id);
+        setSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Network error during feedback submission:", error);
+    }
+  };
 
-  existingFeedback = storedFeedback
-    ? JSON.parse(storedFeedback)
-    : [];
+  const handleCsvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  if (!Array.isArray(existingFeedback)) {
-    existingFeedback = [];
-  }
-} catch (error) {
-  console.error(
-    "Unable to read stored feedback:",
-    error
-  );
+    const data = new FormData();
+    data.append("file", file);
+    setUploadStatus("Uploading...");
 
-  existingFeedback = [];
-}
-    localStorage.setItem(
-      "consultationFeedback",
-      JSON.stringify([
-        ...existingFeedback,
-        newFeedback,
-      ])
-    );
-
-    setFeedbackId(id);
-    setSubmitted(true);
+    try {
+      const res = await fetch("http://127.0.0.1:8000/analyze-upload", {
+        method: "POST",
+        body: data,
+      });
+      const result = await res.json();
+      if (result.status === "success") {
+        setUploadStatus(`✓ Uploaded ${result.insertedCount} comments!`);
+      } else {
+        setUploadStatus("Upload failed.");
+      }
+    } catch (err) {
+      setUploadStatus("Network error.");
+    }
   };
 
   if (submitted) {
     return (
       <div className="feedback-page">
-
         <GovernmentHeader />
-
         <main className="feedback-main">
-
           <div className="feedback-container">
-
             <div className="confirmation">
-
-              <div className="confirmation-mark">
-                ✓
-              </div>
-
-              <h1>
-                Feedback submitted successfully
-              </h1>
-
-              <p>
-                Thank you for participating in the public
-                consultation on the Draft Electric Vehicle
-                Policy 2027.
-              </p>
-
+              <div className="confirmation-mark">✓</div>
+              <h1>Feedback submitted successfully</h1>
+              <p>Thank you for participating in the public consultation.</p>
               <div className="feedback-reference">
-
-                <span>
-                  Your feedback reference number
-                </span>
-
-                <strong>
-                  {feedbackId}
-                </strong>
-
+                <span>Your feedback reference number</span>
+                <strong>{feedbackId}</strong>
               </div>
-
-              <p className="confirmation-note">
-                Please keep this reference number for your records.
-              </p>
-
               <div className="confirmation-actions">
-
-                <button
-                  className="primary-action"
-                  onClick={() => navigate("/")}
-                >
+                <button className="primary-action" onClick={() => navigate("/")}>
                   Back to consultations
                 </button>
-
-                <button
-                  className="secondary-action"
-                  onClick={() =>
-                    navigate("/authority")
-                  }
-                >
-                  Authority Dashboard
-                </button>
-
               </div>
-
             </div>
-
           </div>
-
         </main>
-
       </div>
     );
   }
 
   return (
     <div className="feedback-page">
-
       <GovernmentHeader />
-
       <main className="feedback-main">
-
         <div className="feedback-container">
-
-          <div className="feedback-breadcrumb">
-            Home / Consultations / Draft Electric Vehicle
-            Policy 2027 / Give Feedback
-          </div>
-
-          <button
-            className="feedback-back"
-            onClick={() =>
-              navigate("/consultation/ev-policy-2027")
-            }
-          >
-            ← Back to consultation
+          <div className="feedback-breadcrumb">Home / Consultations / Give Feedback</div>
+          <button className="feedback-back" onClick={() => navigate("/")}>
+            ← Back to home
           </button>
-
-          <div className="feedback-heading">
-
-            <div className="feedback-label">
-              PUBLIC FEEDBACK
-            </div>
-
-            <h1>
-              Give your feedback
-            </h1>
-
-            <p>
-              Draft Electric Vehicle Policy 2027
-            </p>
-
-            <span>
-              Ministry of Heavy Industries
-            </span>
-
-          </div>
-
+          
           <div className="feedback-layout">
-
-            <form
-              className="feedback-form"
-              onSubmit={handleSubmit}
-            >
-
-              {/* DETAILS */}
-
+            <form className="feedback-form" onSubmit={handleSubmit}>
               <section className="form-section">
-
-                <h2>
-                  Your details
-                </h2>
-
-                <p className="section-description">
-                  Provide your basic contact details.
-                </p>
-
+                <h2>Your details</h2>
                 <div className="form-grid">
-
                   <div className="form-field">
-
-                    <label htmlFor="name">
-                      Name <span>*</span>
-                    </label>
-
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Enter your name"
-                      required
-                    />
-
+                    <label htmlFor="name">Name <span>*</span></label>
+                    <input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required />
                   </div>
-
                   <div className="form-field">
-
-                    <label htmlFor="email">
-                      Email address <span>*</span>
-                    </label>
-
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email address"
-                      required
-                    />
-
+                    <label htmlFor="email">Email address <span>*</span></label>
+                    <input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                   </div>
-
                 </div>
-
               </section>
 
-              {/* RULE */}
-
               <section className="form-section">
-
-                <h2>
-                  What are you commenting on?
-                </h2>
-
-                <p className="section-description">
-                  Select the section of the proposal that
-                  your feedback relates to.
-                </p>
-
+                <h2>What are you commenting on?</h2>
                 <div className="form-field">
-
-                  <label htmlFor="rule">
-                    Policy section <span>*</span>
-                  </label>
-
-                  <select
-                    id="rule"
-                    name="rule"
-                    value={formData.rule}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">
-                      Select a section
-                    </option>
-
+                  <label htmlFor="rule">Policy section <span>*</span></label>
+                  <select id="rule" name="rule" value={formData.rule} onChange={handleChange} required>
+                    <option value="">Select a section</option>
                     {consultationRules.map((rule) => (
-                      <option
-                        key={rule.id}
-                        value={rule.id}
-                      >
-                        {rule.title}
-                      </option>
+                      <option key={rule.id} value={rule.id}>{rule.title}</option>
                     ))}
                   </select>
-
                 </div>
-
               </section>
 
-              {/* OPINION */}
-
               <section className="form-section">
-
-                <h2>
-                  Your overall view
-                </h2>
-
-                <p className="section-description">
-                  How do you feel about this part of the proposal?
-                </p>
-
-                <div className="opinion-options">
-
-                  <label
-                    className={`opinion-option ${
-                      formData.opinion === "support"
-                        ? "selected"
-                        : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="opinion"
-                      value="support"
-                      checked={
-                        formData.opinion === "support"
-                      }
-                      onChange={handleChange}
-                      required
-                    />
-
-                    <span className="opinion-icon">
-                      😊
-                    </span>
-
-                    <span>
-                      Support
-                    </span>
-                  </label>
-
-                  <label
-                    className={`opinion-option ${
-                      formData.opinion === "neutral"
-                        ? "selected"
-                        : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="opinion"
-                      value="neutral"
-                      checked={
-                        formData.opinion === "neutral"
-                      }
-                      onChange={handleChange}
-                    />
-
-                    <span className="opinion-icon">
-                      😐
-                    </span>
-
-                    <span>
-                      Neutral / Undecided
-                    </span>
-                  </label>
-
-                  <label
-                    className={`opinion-option ${
-                      formData.opinion === "concern"
-                        ? "selected"
-                        : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="opinion"
-                      value="concern"
-                      checked={
-                        formData.opinion === "concern"
-                      }
-                      onChange={handleChange}
-                    />
-
-                    <span className="opinion-icon">
-                      ☹
-                    </span>
-
-                    <span>
-                      Concern / Oppose
-                    </span>
-                  </label>
-
-                </div>
-
-              </section>
-
-              {/* COMMENT */}
-
-              <section className="form-section">
-
-                <h2>
-                  Your comments
-                </h2>
-
-                <p className="section-description">
-                  Share your suggestions, concerns or
-                  observations about the proposal.
-                </p>
-
+                <h2>Your comments</h2>
                 <div className="form-field">
-
-                  <label htmlFor="language">
-                    Language
-                  </label>
-
-                  <select
-                    id="language"
-                    name="language"
-                    value={formData.language}
-                    onChange={handleChange}
-                  >
-                    <option value="English">
-                      English
-                    </option>
-
-                    <option value="Hindi">
-                      हिन्दी
-                    </option>
-
-                    <option value="Marathi">
-                      मराठी
-                    </option>
+                  <label htmlFor="language">Language</label>
+                  <select id="language" name="language" value={formData.language} onChange={handleChange}>
+                    <option value="English">English</option>
+                    <option value="Hindi">हिन्दी</option>
+                    <option value="Marathi">मराठी</option>
                   </select>
-
                 </div>
-
                 <div className="form-field feedback-text-field">
-
-                  <label htmlFor="feedback">
-                    Feedback <span>*</span>
-                  </label>
-
-                  <textarea
-                    id="feedback"
-                    name="feedback"
-                    value={formData.feedback}
-                    onChange={handleChange}
-                    placeholder="Write your comments or suggestions here..."
-                    rows="8"
-                    maxLength="3000"
-                    required
-                  />
-
-                  <div className="character-count">
-                    {formData.feedback.length} / 3000
-                  </div>
-
+                  <label htmlFor="feedback">Feedback <span>*</span></label>
+                  <textarea id="feedback" name="feedback" value={formData.feedback} onChange={handleChange} rows="6" required />
                 </div>
-
               </section>
 
-              {/* CONSENT */}
-
               <section className="form-section">
-
                 <div className="consent-row">
-
-                  <input
-                    id="consent"
-                    name="consent"
-                    type="checkbox"
-                    checked={formData.consent}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label htmlFor="consent">
-                    I confirm that the information provided
-                    is accurate and agree to the submission
-                    of this feedback.
-                  </label>
-
+                  <input id="consent" name="consent" type="checkbox" checked={formData.consent} onChange={handleChange} required />
+                  <label htmlFor="consent">I confirm that the information provided is accurate.</label>
                 </div>
-
               </section>
 
               <div className="form-actions">
-
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() =>
-                    navigate(
-                      "/consultation/ev-policy-2027"
-                    )
-                  }
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="submit-button"
-                >
-                  Submit Feedback
-                </button>
-
+                <button type="submit" className="submit-button">Submit Feedback</button>
               </div>
-
             </form>
 
-            {/* INFORMATION */}
-
             <aside className="feedback-information">
-
-              <h2>
-                Before you submit
-              </h2>
-
-              <ul>
-
-                <li>
-                  Select the policy section that your
-                  comment relates to.
-                </li>
-
-                <li>
-                  Keep your comments specific and relevant
-                  to the proposal.
-                </li>
-
-                <li>
-                  Do not include sensitive personal
-                  information.
-                </li>
-
-                <li>
-                  Your feedback may be analysed to identify
-                  public sentiment and common concerns.
-                </li>
-
-              </ul>
-
-              <div className="consultation-summary">
-
-                <span>
-                  Consultation
-                </span>
-
-                <strong>
-                  Draft Electric Vehicle Policy 2027
-                </strong>
-
-                <span>
-                  Closing date
-                </span>
-
-                <strong>
-                  15 September 2026
-                </strong>
-
+              <h2>Testing & Help</h2>
+              <input type="file" accept=".csv" ref={fileInputRef} style={{ display: "none" }} onChange={handleCsvUpload} />
+              <div style={{ marginTop: "10px", padding: "12px", border: "1px dashed #90caf9", borderRadius: "6px", background: "#f0f7ff" }}>
+                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} style={{ width: "100%", padding: "8px", background: "#1976d2", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+                  Upload Test CSV Data
+                </button>
+                {uploadStatus && <span style={{ display: "block", fontSize: "0.8rem", marginTop: "6px", color: "#0d47a1" }}>{uploadStatus}</span>}
               </div>
-
             </aside>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }
