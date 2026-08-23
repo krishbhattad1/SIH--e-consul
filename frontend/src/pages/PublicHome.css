@@ -1,0 +1,653 @@
+.public-portal {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #ffffff;
+  color: #20262d;
+}
+
+/* -----------------------------------------
+   PAGE INTRODUCTION
+----------------------------------------- */
+
+.page-introduction {
+  width: 100%;
+
+  padding: 25px 4.5% 32px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #d5dbe1;
+}
+
+.breadcrumb {
+  margin-bottom: 25px;
+
+  color: #4f5964;
+
+  font-size: 12px;
+}
+
+.introduction-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 40px;
+}
+
+.introduction-copy {
+  max-width: 900px;
+}
+
+.introduction-copy h1 {
+  margin: 0;
+
+  color: #25384d;
+
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.introduction-copy p {
+  max-width: 800px;
+
+  margin: 11px 0 0;
+
+  color: #4f5964;
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.consultation-count {
+  min-width: 175px;
+
+  padding-left: 25px;
+
+  border-left: 1px solid #ccd3da;
+}
+
+.consultation-count strong {
+  display: block;
+
+  color: #4f5964;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.consultation-count span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #174a7e;
+
+  font-size: 27px;
+  font-weight: 600;
+}
+
+/* -----------------------------------------
+   SEARCH
+----------------------------------------- */
+
+.search-section {
+  width: 100%;
+
+  padding: 28px 4.5%;
+
+  background: #f3f5f7;
+
+  border-bottom: 1px solid #d5dbe1;
+}
+
+.search-heading {
+  margin-bottom: 18px;
+}
+
+.search-heading h2 {
+  margin: 0;
+
+  color: #304255;
+
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.search-heading p {
+  margin: 5px 0 0;
+
+  color: #4f5964;
+
+  font-size: 13px;
+}
+
+.filters {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 220px 100px;
+
+  align-items: end;
+
+  gap: 12px;
+}
+
+.search-field,
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.search-field label,
+.filter-field label {
+  color: #3f4a55;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.search-field input,
+.filter-field select {
+  width: 100%;
+  height: 41px;
+
+  padding: 0 12px;
+
+  border: 1px solid #aeb7c0;
+  border-radius: 2px;
+
+  background: #ffffff;
+  color: #28323c;
+
+  outline: none;
+
+  font-size: 13px;
+}
+
+.search-field input::placeholder {
+  color: #5f6872;
+}
+
+.search-field input:focus,
+.filter-field select:focus {
+  border-color: #174a7e;
+}
+
+.search-button {
+  height: 41px;
+
+  border: 1px solid #174a7e;
+  border-radius: 2px;
+
+  background: #174a7e;
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.search-button:hover {
+  background: #123c66;
+}
+
+/* -----------------------------------------
+   CONSULTATIONS
+----------------------------------------- */
+
+.consultation-section {
+  width: 100%;
+
+  padding: 44px 4.5% 60px;
+
+  background: #ffffff;
+}
+
+.listing-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.listing-header h2 {
+  margin: 0;
+
+  color: #283c51;
+
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.listing-header p {
+  margin: 7px 0 0;
+
+  color: #4f5964;
+
+  font-size: 13px;
+}
+
+.result-count {
+  color: #4f5964;
+
+  font-size: 12px;
+}
+
+.consultation-list {
+  width: 100%;
+
+  border-top: 1px solid #bfc7cf;
+}
+
+.consultation-row {
+  width: 100%;
+
+  min-height: 175px;
+
+  padding: 24px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #d5dbe1;
+
+  background: #ffffff;
+}
+
+.consultation-row:hover {
+  background: #fafbfc;
+}
+
+.consultation-information {
+  flex: 1;
+  min-width: 0;
+}
+
+.consultation-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-bottom: 8px;
+
+  color: #267840;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.consultation-status span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #2b9348;
+}
+
+.consultation-information h3 {
+  margin: 0;
+
+  color: #25384d;
+
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.department {
+  margin: 6px 0 20px;
+
+  color: #4f5964;
+
+  font-size: 13px;
+}
+
+.consultation-details {
+  display: flex;
+  gap: 55px;
+}
+
+.consultation-details div {
+  min-width: 150px;
+}
+
+.consultation-details span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #5f6872;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.consultation-details strong {
+  color: #303b47;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.consultation-action {
+  padding-left: 35px;
+}
+
+.consultation-action button {
+  min-width: 135px;
+
+  padding: 11px 15px;
+
+  border: 1px solid #174a7e;
+  border-radius: 2px;
+
+  background: #ffffff;
+  color: #174a7e;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.consultation-action button:hover {
+  background: #174a7e;
+  color: #ffffff;
+}
+
+.consultation-action span {
+  margin-left: 10px;
+}
+
+.no-results {
+  padding: 50px 20px;
+
+  text-align: center;
+
+  border-bottom: 1px solid #d5dbe1;
+}
+
+.no-results h3 {
+  margin: 0;
+
+  color: #354352;
+
+  font-size: 17px;
+}
+
+.no-results p {
+  margin-top: 8px;
+
+  color: #4f5964;
+
+  font-size: 13px;
+}
+
+/* -----------------------------------------
+   PARTICIPATION INFORMATION
+----------------------------------------- */
+
+.information-section {
+  width: 100%;
+
+  padding: 45px 4.5% 55px;
+
+  background: #f3f5f7;
+
+  border-top: 1px solid #d5dbe1;
+}
+
+.information-heading {
+  margin-bottom: 24px;
+}
+
+.section-kicker {
+  color: #174a7e;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.information-heading h2 {
+  margin: 7px 0 0;
+
+  color: #2d4054;
+
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.information-table {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  border-top: 1px solid #c7cfd7;
+  border-left: 1px solid #c7cfd7;
+}
+
+.information-step {
+  min-height: 175px;
+
+  padding: 23px;
+
+  border-right: 1px solid #c7cfd7;
+  border-bottom: 1px solid #c7cfd7;
+
+  background: #ffffff;
+}
+
+.step-number {
+  color: #174a7e;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.information-step h3 {
+  margin: 12px 0 8px;
+
+  color: #354454;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.information-step p {
+  margin: 0;
+
+  color: #4f5964;
+
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* -----------------------------------------
+   FOOTER
+----------------------------------------- */
+
+.portal-footer {
+  width: 100%;
+
+  padding: 30px 4.5% 16px;
+
+  background: #27394c;
+  color: #ffffff;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 40px;
+}
+
+.footer-content strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.footer-content p {
+  margin: 6px 0 0;
+
+  color: #d0d7de;
+
+  font-size: 12px;
+}
+
+.footer-navigation {
+  display: flex;
+  gap: 25px;
+
+  color: #d7dee5;
+
+  font-size: 12px;
+}
+
+.footer-navigation a {
+  color: #d7dee5;
+  text-decoration: none;
+}
+
+.footer-navigation a:hover {
+  text-decoration: underline;
+}
+
+.footer-legal {
+  margin-top: 25px;
+  padding-top: 13px;
+
+  border-top: 1px solid #46586a;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #b4bec8;
+
+  font-size: 11px;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-legal-links a {
+  color: #b4bec8;
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.footer-legal-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-legal-links span {
+  color: #718091;
+}
+
+/* -----------------------------------------
+   RESPONSIVE
+----------------------------------------- */
+
+@media (max-width: 900px) {
+  .filters {
+    grid-template-columns: 1fr 200px;
+  }
+
+  .search-button {
+    grid-column: 2;
+  }
+
+  .information-table {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .page-introduction,
+  .search-section,
+  .consultation-section,
+  .information-section {
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  .introduction-row {
+    display: block;
+  }
+
+  .consultation-count {
+    margin-top: 20px;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .search-button {
+    grid-column: auto;
+  }
+
+  .listing-header {
+    display: block;
+  }
+
+  .result-count {
+    margin-top: 12px;
+  }
+
+  .consultation-row {
+    display: block;
+    padding: 20px 15px;
+  }
+
+  .consultation-details {
+    gap: 25px;
+    flex-wrap: wrap;
+  }
+
+  .consultation-action {
+    padding: 20px 0 0;
+  }
+
+  .consultation-action button {
+    width: 100%;
+  }
+
+  .information-table {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .footer-navigation {
+    flex-wrap: wrap;
+    gap: 15px 25px;
+  }
+
+  .footer-legal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-legal-links {
+    flex-wrap: wrap;
+  }
+}
